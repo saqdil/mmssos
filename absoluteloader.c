@@ -10,7 +10,7 @@ void main()
   scanf("%s", name);
 
   FILE *f1;
-  f1 = fopen("RLIN3.txt", "r");
+  f1 = fopen("absoluteloaderinput.txt", "r");
 
   fscanf(f1, "%s", line);
 
