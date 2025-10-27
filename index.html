@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Lab Programs Viewer</title>
+  <style>
+    :root{--bg:#0f1724;--panel:#0b1220;--muted:#98a0b3;--accent:#7dd3fc}
+    *{box-sizing:border-box;font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial}
+    body{margin:0;background:linear-gradient(180deg,#071022 0%, #071827 100%);color:#e6eef8;height:100vh;display:flex;align-items:stretch}
+    .container{display:grid;grid-template-columns:300px 1fr;gap:18px;padding:18px;width:100%}
+    .sidebar{background:var(--panel);border-radius:10px;padding:12px;overflow:auto;box-shadow:0 6px 18px rgba(2,6,23,.6)}
+    .viewer{background:var(--panel);border-radius:10px;padding:12px;overflow:auto;box-shadow:0 6px 18px rgba(2,6,23,.6)}
+    h1{font-size:18px;margin:6px 0 12px;color:var(--accent)}
+    .file{padding:8px;border-radius:6px;margin:6px 0;cursor:pointer;color:var(--muted);display:flex;justify-content:space-between;align-items:center}
+    .file:hover{background:#071829;color:#fff}
+    .file.active{background:#062433;color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.02)}
+    pre{white-space:pre-wrap;word-wrap:break-word;background:transparent;margin:0;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px;line-height:1.45}
+    .meta{display:flex;gap:8px;align-items:center}
+    .search{width:100%;padding:8px;margin-bottom:8px;border-radius:6px;border:1px solid rgba(255,255,255,.04);background:transparent;color:var(--muted)}
+    .controls{display:flex;gap:8px;align-items:center;margin-bottom:8px}
+    .btn{padding:6px 10px;border-radius:6px;background:transparent;border:1px solid rgba(255,255,255,.04);color:var(--muted);cursor:pointer}
+    .small{font-size:12px;color:var(--muted)}
+    .notfound{padding:20px;color:var(--muted)}
+    .filenameTitle{font-weight:600;margin-bottom:8px}
+    a.download{color:var(--accent);text-decoration:none;font-weight:600}
+    @media(max-width:760px){.container{grid-template-columns:1fr;grid-auto-rows:auto}.sidebar{order:2}.viewer{order:1;height:60vh}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <aside class="sidebar">
+      <h1>Lab Programs</h1>
+
+      <input id="search" class="search" placeholder="Filter files (type to search)" />
+
+      <div class="controls">
+        <button id="reloadList" class="btn small">Reload list</button>
+        <div style="flex:1"></div>
+        <span class="small" id="count">0 files</span>
+      </div>
+
+      <div id="filesList"></div>
+    </aside>
+
+    <main class="viewer" id="viewer">
+      <div id="fileHeader" style="margin-bottom:12px">
+        <div class="filenameTitle" id="fileName">Select a file to view</div>
+        <div class="meta small" id="fileMeta">Files served from same folder as <code>index.html</code></div>
+      </div>
+
+      <div id="contentArea" style="height:calc(100% - 72px);overflow:auto;padding:8px;border-radius:6px;background:rgba(0,0,0,.10)">
+        <div class="notfound">No file selected.</div>
+        <pre id="fileContent" style="display:none"></pre>
+      </div>
+    </main>
+  </div>
+
+<script>
+  // --- EDIT THIS LIST to match exact filenames in your folder (case-sensitive) ---
+  // I included filenames visible in your screenshot as defaults. If you have more/other files,
+  // replace or add them here. Files must be in same folder as this index.html.
+  const files = [
+    "16bitaddition.asm",
+    "16bitsearching.asm",
+    "16bitsorting.asm",
+    "16bitsorting+.asm",
+    "16bitsubtract.asm",
+    "absoluteloader.c",
+    "bankers.c",
+    "cscan.c",
+    "fcfs.c",
+    "fcfsdisk.c",
+    "fifo.c",
+    "indexed.c",
+    "lfu.c",
+    "linked.c",
+    "lru.c",
+    "onepassmacro.c",
+    "palindrome.asm",
+    "pass1.c",
+    "pass2.c",
+    "priority.c",
+    "relocatingloader.c",
+    "rr.c",
+    "scan.c",
+    "sequential.c",
+    "sjf.c"
+  ];
+  // ---------------------------------------------------------------------------
+
+  const filesListEl = document.getElementById('filesList');
+  const fileContentEl = document.getElementById('fileContent');
+  const fileNameEl = document.getElementById('fileName');
+  const fileMetaEl = document.getElementById('fileMeta');
+  const countEl = document.getElementById('count');
+  const searchEl = document.getElementById('search');
+
+  function renderList(filter = '') {
+    filesListEl.innerHTML = '';
+    const normalized = filter.trim().toLowerCase();
+    const shown = files.filter(f => f.toLowerCase().includes(normalized));
+    countEl.textContent = shown.length + ' files';
+    if (shown.length === 0) {
+      filesListEl.innerHTML = '<div class="small notfound">No files match.</div>';
+      return;
+    }
+    shown.forEach(name => {
+      const div = document.createElement('div');
+      div.className = 'file';
+      div.innerHTML = `<span>${name}</span><span class="small">view ▶</span>`;
+      div.onclick = () => loadFile(name, div);
+      filesListEl.appendChild(div);
+    });
+  }
+
+  async function loadFile(name, element) {
+    // highlight active
+    document.querySelectorAll('.file').forEach(el => el.classList.remove('active'));
+    if (element) element.classList.add('active');
+
+    fileNameEl.textContent = name;
+    fileMetaEl.innerHTML = `Viewing <code>${name}</code> — <a class="download" href="./${encodeURIComponent(name)}" download>Download raw</a>`;
+
+    fileContentEl.style.display = 'none';
+    document.querySelector('.notfound')?.remove?.();
+
+    try {
+      const res = await fetch('./' + name);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      const text = await res.text();
+      // escape for safe display
+      const escaped = text.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
+      fileContentEl.innerHTML = escaped;
+      fileContentEl.style.display = '';
+      fileContentEl.scrollTop = 0;
+    } catch (err) {
+      fileContentEl.style.display = 'none';
+      const area = document.getElementById('contentArea');
+      area.innerHTML = `<div class="notfound">Failed to load file: ${name} — ${err.message}</div>`;
+    }
+  }
+
+  // search
+  searchEl.addEventListener('input', () => renderList(searchEl.value));
+  document.getElementById('reloadList').addEventListener('click', () => {
+    // if you update the `files` array in the code, reload page or call renderList()
+    renderList(searchEl.value);
+  });
+
+  // initial render
+  renderList();
+</script>
+</body>
+</html>
