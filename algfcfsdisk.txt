@@ -1,0 +1,39 @@
+algfcfsdisk
+
+    Start
+
+    Create a variable n to store the number of processes.
+
+    Create an array p of size 50 to store process information. Each element of the array will represent a process and will have the following fields: a. pid: The process ID b. bt: The burst time of the process c. wt: The waiting time of the process d. tat: The turnaround time of the process
+
+    Prompt the user to enter the number of processes into n.
+
+    For each process i from 0 to n 1: a. Prompt the user to enter the burst time for process i+1 b. Store the burst time in p[i].bt.
+
+    Initialize the waiting time for the first process p[0] .wt to 0.
+
+    For each process i from 1 to n 1: a. Calculate the waiting time for process i using the formula: :p[i].wt=p[i−1].bt+p[i−1].wt
+
+    For each process i from 0 to n 1: a. Calculate the turnaround time for process i using the formula: p[i].tat=p[i].wt+p[i].b
+
+    Print a header with column names: "Pid", "BT′′, "WT′′, "TAT".
+
+    For each process i from 0 to n−1: a. Print a row with the following information for process i: i. p[i].pid ii. p[i] .bt iii. p[i] .wt iv. P[i] .tat
+
+    Initialize a variable temp to 0.
+
+    For each process i from 0 to n−1: a. Add p[i] .wt to temp.
+
+    Calculate the average waiting time using the formula: (float)temp / n
+
+    Print the average waiting time.
+
+    Initialize a variable temp to 0.
+
+    For each process i from 0 to n−1: a. Add p[i].tat to temp.
+
+    Calculate the average turnaround time using the formula: (float)temp / n
+
+    Print the average turnaround time.
+
+    End

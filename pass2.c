@@ -20,9 +20,9 @@ void passTwo() {
     int loc;
     FILE *fp1, *fp2, *fp3, *fp4;
 
-    fp1 = fopen("intermediate.txt", "r");
+    fp1 = fopen("pass2intermediate.txt", "r");
     fp2 = fopen("optab.txt", "r");
-    fp3 = fopen("symtab.txt", "r");
+    fp3 = fopen("pass2symtab.txt", "r");
     fp4 = fopen("output.txt", "w");
 
     if (!fp1 || !fp2 || !fp3 || !fp4) {

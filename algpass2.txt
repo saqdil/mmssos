@@ -1,0 +1,116 @@
+algpass2
+
+    Start
+
+    Define variables for various program components: a. a: Array to store characters. b. ad: Array to store temporary characters during conversion. c. label, opcode, operand: Strings to store program information. d. symbol: String to store symbol table entries. e. start, diff, i, address, add, len, actual_len, finaddr, prevaddr, j: Integers for various calculations and operations. f. mnemonic: 2D array to store mnemonic codes. g. code: 2D array to store corresponding machine codes.
+
+    Open necessary files: a. output.txt: File for writing the assembled program. b. symtab.txt: File for reading the symbol table. c. intermediate.txt: File for reading the intermediate code. d. objcode.txt: File for writing the object code.
+
+    Read the first line from the intermediate code file.
+
+    Loop until the opcode is "END": a. Update prevaddr with the current address. b. Read the next line from the intermediate code file.
+
+    Set finaddr to the final address.
+
+    Close and reopen the intermediate code file.
+
+    Read the first line again.
+
+    If the opcode is "START": a. Write the line to the output file. b. Write the header record to the object code file with label, start address, and final address. c. Read the next line. d. Calculate the difference between the current address and the start address. e. Write the text record to the object code file with the address, difference, and opcode.
+
+    For each remaining line: a. Check the opcode: BYTE: Write the line to the output file. Extract the actual length from the operand. Write the text record to the object code file with the address, length, and operand data in hexadecimal. WORD: Write the line to the output file. Convert the operand to a decimal integer and store it in a. Write the line to the output file with the converted integer. Write the text record to the object code file with the address and converted integer in hexadecimal. RESB/RESW: Write the line to the output file. Other opcodes: Find the matching mnemonic and code in the respective arrays. If the operand is "COPY": Write the line to the output file with the corresponding machine code appended. Write the text record to the object code file with the address, opcode, and "0000" in hexadecimal. Else: Read the symbol table file until the operand matches a symbol. Store the corresponding address in add. Write the line to the output file with the corresponding machine code and hexadecimal address appended. Write the text record to the object code file with the address, opcode, and hexadecimal address.
+
+    Write the last line to the output file.
+
+    Write the end record to the object code file with the start address.
+
+    Close all open files.
+
+    Call the display function to show the contents of relevant files.
+
+    Return.
+
+    To display, open the intermediate code, symbol table, output, and object code files.
+
+    Read and print the contents of each file to the console.
+
+    Close all open files.
+
+    Return.
+
+    End
+
+
+1. Start
+2. Define variables for various program components:
+a. a: Array to store characters.
+b. ad: Array to store temporary characters during conversion.
+c. label, opcode, operand: Strings to store program information.
+d. symbol: String to store symbol table entries.
+e. start, diff, i, address, add, len, actual_len, finaddr, prevaddr, j: Integers for
+various calculations and operations.
+f. mnemonic: 2D array to store mnemonic codes.
+g. code: 2D array to store corresponding machine codes.
+3. Open necessary files:
+a. output.txt: File for writing the assembled program.
+b. symtab.txt: File for reading the symbol table.
+c. intermediate.txt: File for reading the intermediate code.
+d. objcode.txt: File for writing the object code.
+4. Read the first line from the intermediate code file.
+5. Loop until the opcode is "END":
+a. Update prevaddr with the current address.
+b. Read the next line from the intermediate code file.
+6. Set finaddr to the final address.
+7. Close and reopen the intermediate code file.
+8. Read the first line again.
+9. If the opcode is "START":
+a. Write the line to the output file.
+b. Write the header record to the object code file with label, start address, and
+final address.
+c. Read the next line.
+d. Calculate the difference between the current address and the start address.
+e. Write the text record to the object code file with the address, difference, and
+opcode.
+10. For each remaining line:
+a. Check the opcode:
+BYTE:
+Write the line to the output file.
+Extract the actual length from the operand.
+Dept of Computer Engineering, Govt. Model Engineering College, Thrikkakara
+114
+Dept of Computer Engineering, Govt. Model Engineering College, Thrikkakara
+115
+Write the text record to the object code file with the address, length, and
+operand data in hexadecimal.
+WORD:
+Write the line to the output file.
+Convert the operand to a decimal integer and store it in a.
+Write the line to the output file with the converted integer.
+Write the text record to the object code file with the address and converted
+integer in hexadecimal.
+RESB/RESW:
+Write the line to the output file.
+Other opcodes:
+Find the matching mnemonic and code in the respective arrays.
+If the operand is "COPY":
+Write the line to the output file with the corresponding machine code
+appended.
+Write the text record to the object code file with the address, opcode,
+and "0000" in hexadecimal.
+Else:
+Read the symbol table file until the operand matches a symbol.
+Store the corresponding address in add.
+Write the line to the output file with the corresponding machine code
+and hexadecimal address appended.
+Write the text record to the object code file with the address, opcode,
+and hexadecimal address.
+11. Write the last line to the output file.
+12. Write the end record to the object code file with the start address.
+13. Close all open files.
+14. Call the display function to show the contents of relevant files.
+15. Return.
+16. To display, open the intermediate code, symbol table, output, and object code files.
+17. Read and print the contents of each file to the console.
+18. Close all open files.
+19. Return.
+20. End

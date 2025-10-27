@@ -1,0 +1,17 @@
+alg16bitsubtract
+
+    Initialize CX to 0000
+
+    Move SI to 3000
+
+    Load AX at SI
+
+    Increment SI twice
+
+    Load BX at SI
+
+    Subtract AX,BX and store the result in AX
+
+    Move AX to DI
+
+    Halt

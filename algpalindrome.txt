@@ -1,0 +1,63 @@
+algpalindrome
+
+    Move the address of the data segment into AX
+
+    Set the data segment DS to the value in AX
+
+    Load the effective address of MSG1 into DX
+
+    Set AH to 09H (Print String function of INT 21H)
+
+    Call INT 21H to print the message in DX
+
+    Load the effective address of STR1 into SI
+
+    Load the effective address of STR1 into DI
+
+    Set AH to 01H (Read Character function of INT 21H)
+
+    Read a character from the standard input into AL
+
+    Compare AL with carriage return (Enter key)
+
+    Jump to TERMINATE if AL is carriage return (end of input)
+
+    Store the read character at the address in DI
+
+    Increment DI to move to the next memory location
+
+    Jump to NEXT to read the next character
+
+    Set AL to '$'
+
+    Store '$' at the end of the entered string
+
+    Decrement DI to point to the last character of the entered string
+
+    Load a character from the beginning of the string into AL
+
+    Compare the character at the end with the one at the beginning
+
+    Jump to NOTPALINDROME if the characters are not equal
+
+    Increment SI to move to the next character in the string
+
+    Compare SI with DI to check if all characters have been compared
+
+    Jump to DOTHIS if there are more characters to compare
+
+    Set AH to 09H (Print String function of INT 21H)
+
+    Load the effective address of MSG2 into DX
+
+    Call INT 21H to print the message in DX
+
+    Set AH to 09H (Print String function of INT 21H)
+
+    Load the effective address of MSG3 into DX
+
+    Call INT 21H to print the message in DX
+
+    Set AH to 4CH (Exit function of INT 21H)
+
+    Call INT 21H to exit the program

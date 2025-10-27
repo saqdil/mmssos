@@ -1,0 +1,33 @@
+algpass1
+
+    Start
+
+    Declare variables for label, opcode, operand, code, and mnemonic.
+
+    Open files for input (input.txt), optab (optab.txt), symbol table (symtab.txt), intermediate code (intermediate.txt), and length (length.txt).
+
+    Read the first line from the input file (input.txt) into the label, opcode, and operand variables.
+
+    Check if the opcode is "START". a. If yes, convert the operand to an integer (start) and assign it to the locctr variable. b. If no, set locctr to 0.
+
+    Iterate until the opcode is "END". a. Write the current locctr, label, opcode, and operand to the intermediate code file (intermediate.txt). b. If the label does not start with "**", write the label and locctr to the symbol table file (symtab.txt). c. Read the code and mnemonic from the optab file (optab.txt). d. Iterate through the optab file until the code is "END". i. If the opcode matches the code, increment locctr by 3. ii. Read the next line from the optab file. e. Update locctr based on the opcode: i. WORD: locctr += 3 ii. RESW: locctr += (3 * operand) iii. BYTE: locctr += 1 iv. RESB: locctr += operand f. Read the next line from the input file (input.txt).
+
+    Write the last line from the input file to the intermediate code file.
+
+    Close all open files.
+
+    Call the display function to display the contents of the input table, output table, and symbol table.
+
+    Calculate the length of the program by subtracting the start address from the final locctr.
+
+    Write the length of the program to the length file (length.txt).
+
+    Display the length of the program.
+
+    Open the input table file (input.txt), output table file (intermediate.txt), and symbol table file (symtab.txt).
+
+    Read the contents of each file and print them to the console.
+
+    Close all open files.
+
+    End

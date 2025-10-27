@@ -1,0 +1,45 @@
+priority
+
+    Start
+
+    Declare global variables 'i', 'j', 'n', 'tatAvg', 'wtAvg'.
+
+    Declare a structure 'Process' with members 'pld', 'bt', and 'priority'.
+
+    Declare an array of 'Process' structures named 'p[20]'
+
+    For each process 'i' from 0 to 'n-1': a. Set 'p[i].pld' to ' i+1′.
+
+    Prompt the user to enter the burst time for process 'p[i].pld'.
+
+    Prompt the user to enter the priority for the process.
+
+    Define a function to swap two integers.
+
+    Define a function to sort 'Process' array based on priority using the Bubble Sort algorithm.
+
+    For 'i' from 0 to 'n-1': a. For 'j' from 0 to 'n-1-i': i. If 'p[j].priority > p[j + 1].priority', swap 'p[j]' and ' p[j+1]′.
+
+    Define a function to read burst times and priorities for each process.
+
+    For each process 'i' from 0 to "n−1": a. Prompt the user to enter the burst time for process 'p[i].pld'. b. Prompt the user to enter the priority for the process.
+
+    Sort the 'Process' array using the 'sort' function.
+
+    Define a function to find waiting time for each process and the average waiting time.
+
+    Set 'wt[0]' to 0.
+
+    For 'i' from 1 to 'n-1': a. Calculate 'wt[i] = wt[i-1] + p[i - 1].bt'.
+
+    Calculate the average waiting time 'wtAvg'.
+
+    Define a function to find turnaround time for each process and the average
+
+    turnaround time.
+
+    Initialize 'tatSum' to 0.
+
+    For 'i' from 0 to 'n-1': a. Calculate 'tat[i] = p[i].bt + wt[i]'. b. Add 'tat[i]' to 'tatSum'.
+
+    Calculate the average turnaround time 'tatAvg'.

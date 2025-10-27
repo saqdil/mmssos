@@ -1,0 +1,29 @@
+alglinked
+
+    Start
+
+    Prompt the user to enter the number of files to be allocated.
+
+    For each file, read the file name, start block, and length from the user.
+
+    For each file, iterate through all other files.
+
+    If the start block or length of the current file overlaps with the start block or length of any other file,
+
+    Increment the count variable by one.
+
+    After iterating through all other files, if the count variable is equal to 1,
+
+    This means that the current file does not overlap with any other file.
+
+    Print the file name, start block, and length to the File Allocation Table.
+
+    Otherwise, the current file overlaps with another file.
+
+    Print an error message that the file cannot be allocated disk space.
+
+    Print the File Allocation Table header.
+
+    For each file that was successfully allocated disk space, print the file name, start block, and length to the File Allocation Table.
+
+    End

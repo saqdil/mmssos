@@ -1,0 +1,15 @@
+indexed
+
+    Start
+
+    Initialize an array of file structures f with size max.
+
+    Read the number of files from the user and store it in n.
+
+    For each file ( (i=0 to n-1): a. Read the start address of the file and store it in f[i].start_address. b. Read the length of the file and store it in f[i].length. c. Read the number of blocks of the file and store it in f[i].no_of_blocks. d. Read the list of allocated blocks for the file and store it in f[i].blocks.
+
+    Print the list of files with their respective start addresses, lengths, and number of blocks.
+
+    Enter a loop that continues until the user chooses to exit: a. Display a menu with two options: 1. Get the allocated blocks for a specific file 2. Exit b. Read the user's choice and store it in ch. c. If the user chooses option 1: i. Read the file number from the user and store it in m. ii. Print the allocated blocks for the file m. d. If the user chooses option 2: i. Exit the loop.
+
+    End

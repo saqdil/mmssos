@@ -1,0 +1,33 @@
+alglru
+
+    Start
+
+    Initialize variables: a. pages array to store the reference string b. frames array to store the frames in memory c. time array to store the access time of each page in a frame
+
+    fCount to store the number of frames
+
+    pCount to store the number of pages
+
+    Prompt the user to enter the number of frames and store it in fCount.
+
+    Create the frames and time arrays with fCount elements and initialize each element of frames to -1 and each element of time to 0.
+
+    Prompt the user to enter the number of pages and store it in pCount.
+
+    Prompt the user to enter the reference string and store it in the pages array.
+
+    Print a header line with "Ref.String" and "Frames".
+
+    Print a line of dashes to separate the header and the data.
+
+    Initialize variables: a. counter to track the access time for each page b. queue to track the position of the next frame to be filled c. faultCount to track the number of page faults
+
+    For each page in the reference string: a. Set a flag to 0. b. Print the current page number. c. Check if the current page is present in any frame: i. For each frame: ii. If the current page is present in the current frame: iii. Set the flag to 1 and print "Hit". iv. Increment the counter. v. Update the access time of the current page in the time array. vi. Break the loop. d. If the page is not found in any frame (flag is 0) and there are empty frames (queue < fCount): i. Increment the faultCount. ii. Increment the counter. iii. Insert the current page into the frames array at the queue position. iv. Set the access time of the current page in the time array to the current counter. v. Increment the queue. e. If the page is not found in any frame (flag is 0) and there are no empty frames (queue == fCount): i. Increment the faultCount. ii. Increment the counter. iii. Find the least recently used (LRU) frame using the findLRU function. iv. Replace the page in the LRU frame with the current page. v. Set the access time of the current page in the time array to the current counter. f. Print the contents of the frames array. g. Print a new line.
+
+    Print the total number of page faults.
+
+    Find the LRU frame by iterating through the time array and finding the frame with the minimum access time.
+
+    Return the index of the LRU frame.
+
+    End

@@ -1,0 +1,41 @@
+alg16bitsorting
+
+    Move the value 500 into the SI register
+
+    Move the byte at the address in SI into the CL register
+
+    Decrement the value in the CL register
+
+    Move the value 500 into the SI register
+
+    Move the byte at the address in SI into the CH register
+
+    Decrement the value in the CH register
+
+    Increment the value in the SI register
+
+    Move the byte at the address in SI into the AL register
+
+    Increment the value in the SI register
+
+    Compare AL with the byte at the address in SI
+
+    Jump to address 41C if the last comparison was a "jump if carry" (carry flag is set)
+
+    Exchange the values of AL and the byte at the address in SI
+
+    Decrement the value in the SI register
+
+    Exchange the values of AL and the byte at the address in SI
+
+    Increment the value in the SI register
+
+    Decrement the value in the CH register
+
+    Jump to address 40F if CH is not zero
+
+    Decrement the value in the CL register
+
+    Jump to address 407 if CL is not zero
+
+    Halt the program

@@ -26,3 +26,5 @@ scan.c
 script.js
 sequential.c
 sjf.c
+oddeven.asm
+oddeven+.asm

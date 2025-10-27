@@ -1,45 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Program Viewer</title>
-  <style>
-    body { font-family: monospace; background: #0f172a; color: #e2e8f0; margin: 0; padding: 1.5rem; }
-    pre { background: #1e293b; padding: 1rem; border-radius: 6px; overflow-x: auto; line-height: 1.5; }
-    a { color: #38bdf8; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-  </style>
+  <link rel="stylesheet" href="style.css" />
+  <script>
+    async function loadFile() {
+      const params = new URLSearchParams(window.location.search);
+      const file = params.get("file");
+      const codeContainer = document.getElementById("code");
+
+      if (!file) {
+        codeContainer.textContent = "No file selected.";
+        return;
+      }
+
+      document.getElementById("filename").textContent = file;
+      try {
+        const res = await fetch(file);
+        if (!res.ok) throw new Error("File not found");
+        const text = await res.text();
+        codeContainer.textContent = text;
+      } catch (err) {
+        codeContainer.textContent = "Error loading file: " + err.message;
+      }
+    }
+    window.onload = loadFile;
+  </script>
 </head>
 <body>
-  <a href="index.html">← Back to list</a>
+  <a href="index.html">⬅ Back</a>
   <h2 id="filename"></h2>
-  <pre id="content">Loading...</pre>
-
-  <script>
-    const params = new URLSearchParams(window.location.search);
-    const file = params.get('file');
-    const filenameEl = document.getElementById('filename');
-    const contentEl = document.getElementById('content');
-
-    if (!file) {
-      filenameEl.textContent = 'No file selected';
-      contentEl.textContent = '';
-    } else {
-      filenameEl.textContent = file;
-      fetch(file)
-        .then(res => res.ok ? res.text() : Promise.reject(res.status))
-        .then(text => {
-          const escaped = text
-            .replaceAll('&', '&amp;')
-            .replaceAll('<', '&lt;')
-            .replaceAll('>', '&gt;');
-          contentEl.innerHTML = escaped;
-        })
-        .catch(err => {
-          contentEl.textContent = 'Error loading file: ' + err;
-        });
-    }
-  </script>
+  <pre id="code" class="code"></pre>
 </body>
 </html>

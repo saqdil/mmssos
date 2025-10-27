@@ -1,0 +1,67 @@
+alg16bitsorting+.txt
+
+    Start
+
+    Initialize data segment.
+
+    Prompt user to "Enter the length of Array".
+
+    Read the length (N) and store it in LEN.
+
+    Prompt user to "Enter the Array".
+
+    Set SI to 0 and CX to N (loop counter).
+
+    READ_LOOP:
+
+    Call READ_16BIT_NUM procedure to get 16-bit number in AX.
+
+    Store AX in ARRAY[SI].
+
+    Add 2 to SI to point to the next word.
+
+    LOOP READ_LOOP.
+
+    Set outer loop counter CL = N-1.
+
+    OUTER_LOOP:
+
+    Set inner loop counter CH = CL.
+
+    Set SI = 0.
+
+    INNER_LOOP:
+
+    Move ARRAY[SI] into AX.
+
+    Compare AX with ARRAY[SI+2].
+
+    If AX is below or equal, jump to SKIP_SWAP.
+
+    Exchange AX with ARRAY[SI+2].
+
+    Move AX into ARRAY[SI].
+
+    SKIP_SWAP: Add 2 to SI.
+
+    Decrement CH. Jump to INNER_LOOP if not zero.
+
+    Decrement CL. Jump to OUTER_LOOP if not zero.
+
+    Display "Sorted Array:".
+
+    Set CX = N and SI = 0.
+
+    PRINT_LOOP:
+
+    Move ARRAY[SI] into AX.
+
+    Call PRINT_16BIT_NUM procedure.
+
+    Print a space.
+
+    Add 2 to SI.
+
+    LOOP PRINT_LOOP.
+
+    Set AH to 4CH and call INT 21H to exit.

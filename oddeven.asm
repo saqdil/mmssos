@@ -1,0 +1,43 @@
+DATA SEGMENT
+    MSG_PROMPT DB 'Enter a single-digit number (0-9): $'
+    MSG_EVEN   DB 0AH,0DH,'The number is EVEN.$'
+    MSG_ODD    DB 0AH,0DH,'The number is ODD.$'
+DATA ENDS
+
+CODE SEGMENT
+    ASSUME CS:CODE, DS:DATA
+    
+START:
+    MOV AX, DATA
+    MOV DS, AX
+
+    LEA DX, MSG_PROMPT
+    MOV AH, 09H
+    INT 21H
+
+    MOV AH, 01H
+    INT 21H
+
+    SUB AL, 30H 
+
+    TEST AL, 01H
+    
+    JZ PRINT_EVEN
+
+PRINT_ODD:
+    LEA DX, MSG_ODD
+    MOV AH, 09H
+    INT 21H
+    JMP EXIT 
+
+PRINT_EVEN:
+    LEA DX, MSG_EVEN
+    MOV AH, 09H
+    INT 21H
+
+EXIT:
+    MOV AH, 4CH
+    INT 21H
+
+CODE ENDS
+END START

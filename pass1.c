@@ -20,8 +20,8 @@ void passOne() {
     int locctr, start = 0, length = 0;
     FILE *fp1, *fp2, *fp3, *fp4, *fp5;
 
-    fp1 = fopen("input.txt", "r");
-    fp2 = fopen("optab.txt", "r");
+    fp1 = fopen("pass1input.txt", "r");
+    fp2 = fopen("pass1optab.txt", "r");
     fp3 = fopen("symtab.txt", "w");
     fp4 = fopen("intermediate.txt", "w");
     fp5 = fopen("length.txt", "w");

@@ -1,0 +1,49 @@
+fcfs.c
+
+    Start
+
+    Declare an array 'b[]' to store burst times.
+
+    For each process 'i' from 0 to 'n-1': a. Prompt the user to enter the burst time and assign it to 'b[i]'.
+
+    Define a function 'findWaitingtime' that calculates the waiting time for each process and the average waiting time.
+
+    Initialize 'wt[0]' to 0.
+
+    For each process 'i' from 1 to 'n-1': a. Calculate 'wt[i] = wt[i - 1] + b[i - 1]'.
+
+    Calculate the average waiting time 'wtAvg'.
+
+    Define a function 'find Turn Aroundtime' that calculates the turnaround time for each process and the average turnaround time.
+
+    Initialize 'tatSum' to 0.
+
+    For each process 'i' from 0 to 'n-1': a. Calculate ' at[i]=b[i]+wt[i]′. b. Add 'tat[i]' to 'tatSum'.
+
+    Calculate the average turnaround time 'tatAvg'.
+
+    Define a function 'display' that displays the process details, including process ID, burst time, waiting time, and turnaround time.
+
+    Print the table header: "Process BurstTime Waiting Time TurnAround Time".
+
+    For each process 'i' from 0 to 'n-1': a. Print process details: process ID 'i', burst time 'b[i]', waiting time 'wt[i]', turnaround time 'tat[i]'.
+
+    Print the average waiting time and average turnaround time.
+
+    Define a function 'calcTime' that takes an array 'b[]' as input.
+
+    Call 'findWaiting Time(b, wt)' to calculate waiting time.
+
+    Call 'findTurnAroundTime(tat, b, wt)' to calculate turnaround time.
+
+    Call 'display(b, wt, tat)' to display process details and averages.
+
+    Declare an array 'b[20]' to store burst times.
+
+    Prompt the user to enter the number of processes 'n'.
+
+    Call 'read(b)' to read burst times.
+
+    Call 'calcTime(b)' to calculate and display times.
+    
+    Stop

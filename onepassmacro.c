@@ -9,7 +9,7 @@ int main() {
     char argtab[10][20], formal[10][20];
     int argCount, i;
 
-    input  = fopen("inputm.txt", "r");
+    input  = fopen("onepassmacroinput.txt", "r");
     namtab = fopen("namtab.txt", "w+");
     deftab = fopen("deftab.txt", "w+");
     output = fopen("op.txt", "w");

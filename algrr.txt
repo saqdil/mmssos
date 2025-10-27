@@ -1,0 +1,41 @@
+rr.c
+
+    Start
+
+    Read the burst times of processes from the user and store them in the array 'b[]'.
+
+    For each process 'i' from 0 to 'n-1', prompt the user to enter the burst time and
+
+    assign it to 'b[i]'.
+
+    Initialize an array 'b_rem[]' to store remaining burst times, and set each element to the corresponding burst time.
+
+    Set 'time' to 0.
+
+    While there are processes with remaining burst time: a. Set 'flag' to 0. b. For each process 'i' from 0 to 'n-1': i. If 'b_rem[i]' is greater than 0: ii. Set 'flag' to 1. iii. If 'b_rem[i]' is greater than the time quantum: iv. Increment 'time' by the quantum. v. Decrease 'b_rem[i]' by the quantum. vi. Otherwise: vii. Increment 'time' by 'b_rem[i]'. viii. Calculate waiting time 'wt[i]' as 'time - b[i]'. ix. Set 'b_rem[i]' to 0.
+
+    Calculate turnaround time for each process.
+
+    For each process 'i' from 0 to 'n-1', set 'tat[i]' to 'b[i] + wt[i]'.
+
+    Display process details and averages.
+
+    Initialize 'wtSum' and 'tatSum' to 0.
+
+    Print the table header: "Process BurstTime Waiting Time TurnAroundTime".
+
+    For each process 'i' from 0 to 'n-1': a. Add 'wt[i]' to 'wtSum' and 'tat[i]' to 'tatSum'. b. Print process details: process ID 'i', burst time 'b[i]', waiting time 'wt[i]', turnaround time 'tat[i]'.
+
+    Print the average waiting time and average turnaround time.
+
+    Calculate and display waiting time, turnaround time, and averages.
+
+    Call 'findWaiting Time(b, wt)' to calculate waiting time.
+
+    Call 'findTurn AroundTime(tat, b, wt)' to calculate turnaround time.
+
+    Call 'display(b, wt, tat)' to display process details and averages.
+
+    In the 'main()' function: a. Declare arrays 'b[20]', 'tat[20]', and 'wt[20]'. b. Prompt the user to enter the number of processes 'n'. c. Call 'read(b)' to read burst times. d. Prompt the user to enter the time quantum. e. Call 'calcTime(b, wt, tat)' to calculate and display times.
+
+    End

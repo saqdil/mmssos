@@ -1,0 +1,31 @@
+sequential.c
+
+    Start
+
+    Declare variables: name as a 2D array of characters, start and length as arrays of integers, and num as an integer.
+
+    Print "Enter the number of files to be allocated".
+
+    Read the value for num.
+
+    Initialize variables count, k, and j to 0.
+
+    Use a loop to input file details: a. Print "Enter the name of the file i" (i ranging from 1 to num). b. Read the file name into name[i]. c. Print "Enter the start block of the file i". d. Read the start block into start[i]. e. Print "Enter the length of the file i". f. Read the length into length[i].
+
+    Use a nested loop (j from 0 to num-1, k from 1 to num) to check for conflicts in start and length.
+
+    If start[j + 1] is less than or equal to start[j] or start[j + 1] is greater than or equal to length[j], do nothing.
+
+    Otherwise, increment count.
+
+    If count is 1, print "name[i] cannot be allocated disk space".
+
+    Print "File Allocation Table".
+
+    Print the table headers: "File Name", "Start Block", "Length".
+
+    Print the details of the first file: "name[0]", "start[0]", "length[0]".
+
+    Use a loop to print details for the remaining files: a. If start[i + 1] is less than or equal to start[i] or start[i + 1] is greater than or equal to length[i], print details for the file.
+
+    End

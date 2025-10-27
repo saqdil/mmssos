@@ -1,0 +1,33 @@
+alg16bitsearching
+
+    Move the address of the data segment into AX
+
+    Set DS to the address of the data segment
+
+    Set AL with the value of SE (33H)
+
+    Load the effective address of STRING1 into SI
+
+    Set the loop counter CX to 4
+
+    Load the byte at the address in SI into BL
+
+    Compare AL with BL
+
+    Jump to FO if they are equal
+
+    Increment SI to move to the next byte
+
+    Decrement the loop counter
+
+    Jump to UP if CX is not zero
+
+    Print "NOT FOUND"
+
+    Jump to END1
+
+    Print "FOUND"
+
+    Set AH to 4CH (Exit function of INT 21H)
+
+    Call INT 21H to exit the program

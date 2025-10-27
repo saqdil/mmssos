@@ -1,0 +1,19 @@
+algabsoluteloader
+
+    Start
+
+    Read Header record
+
+    Verify program name and length read first Text record
+
+    While record type ≠‘E’ do begin
+
+    If object code is in character form, convert into Internal representation
+
+    Move object code to specified location in memory read next object program record
+
+    End
+
+    Jump to address specified in End record
+
+    End

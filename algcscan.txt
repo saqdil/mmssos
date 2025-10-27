@@ -1,0 +1,67 @@
+algcscan
+
+    Start
+
+    Create an array queue of size 25 to store disk positions to be read.
+
+    Create an integer variable n to store the number of queue requests.
+
+    Create an integer variable headposition to store the initial head position.
+
+    Initialize a variable seek to 0 to track the seek time.
+
+    Create an integer variable maxrange to store the maximum range of the disk.
+
+    Create integer variables temp1 and temp2 to track the indices of arrays queue1 and queue2, respectively.
+
+    Prompt the user to enter the maximum range of the disk and store it in maxrange.
+
+    Prompt the user to enter the number of queue requests and store it in n.
+
+    Prompt the user to enter the initial head position and store it in headposition.
+
+    Read the disk positions to be read into the queue array.
+
+    Create two arrays queue1 and queue2 of size 20 each.
+
+    For each disk position temp in the queue array:
+
+    If temp is greater than the current head position, add temp to queue1.
+
+    Otherwise, add temp to queue2.
+
+    Sort the queue1 array in ascending order.
+
+    Sort the queue2 array in descending order.
+
+    Copy the elements of queue1 into the queue array starting from index 1.
+
+    Set queue[temp1 + 2] to maxrange.
+
+    Copy the elements of queue2 into the queue array starting from index temp1 + 3.
+
+    Set queue[0] to headposition.
+
+    Initialize a variable difference to 0.
+
+    For each index j from 0 to n:
+
+    Calculate the absolute difference between queue[j] and queue[j + 1].
+
+    Add the calculated difference to seek.
+
+    Print a message showing the movement of the disk head.
+
+    Calculate the average seek time by dividing seek by n.
+
+    Print the total seek time.
+
+    Print the average seek time.
+
+    Create a function absoluteValue that takes an integer x as input.
+
+    If x is positive, return x.
+
+    Otherwise, return the negative of x.
+
+    End

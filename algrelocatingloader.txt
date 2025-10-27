@@ -1,0 +1,37 @@
+algrelocatingloader
+
+    Start
+
+    Get PROGADDR from OS
+
+    while not end of input do begin
+
+    Read next input record
+
+    while record type ≠‘E’ do
+
+    Begin
+
+    read next input record
+
+    while record type = ‘T’ do
+
+    Begin
+
+    Move object code from record to location ADR ≠ specified address
+
+    End
+
+    While record type = ‘M’ do
+
+    Begin
+
+    Add PROGADDR at the location PROGADDR + specified address
+
+    End
+
+    End
+
+    End
+
+    End

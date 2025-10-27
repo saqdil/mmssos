@@ -1,0 +1,25 @@
+alg16bitaddition
+
+    Start
+
+    Initialize SI to location 3000
+
+    Initialize DI to location 4000
+
+    Point AX to SI
+
+    Increment SI twice
+
+    Point BX to SI
+
+    Add AX,BX and store the value in AX
+
+    Move 0000 to destination index DI if no carry
+
+    Else move 0001 to DI
+
+    Inc DI
+
+    Move AX to DI
+
+    Halt

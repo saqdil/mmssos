@@ -1,0 +1,33 @@
+algonepassmacro
+
+    Start of program
+
+    Include Necessary Libraries and Define Constants a. Includes standard libraries like <stdio.h>, <stdlib.h>, and <string.h>. b. Defines a constant max as 100
+
+    Helper Functions a. swap: Swaps two characters. b. reverse: Reverses a given character array within a specified range. c. itoa: Converts an integer value to a string based on a given base.
+
+    Main Function (main()): a. Declares file pointers (f1, f2, f3, f4, f5) and arrays for storing label, opcode, operand, name, opcode1, operand1, arg, pos1, pos2. b. Opens input and output files (input.txt, namtab.txt, deftab.txt, argtab.txt, output.txt) using file pointers (fopen()).
+
+    Processing Input File (input.txt): a. Reads the first set of label, opcode, and operand using fscanf() from input.txt. b. Enters a loop that continues until the opcode is not "END". c. Checks if the opcode is "MACRO": i. Writes label to namtab.txt. ii. Writes label and operand to deftab.txt. iii. Reads the next set of label, opcode, and operand. iv. Enters a nested loop until the opcode is not "MEND":
+
+        Checks if the operand starts with '&': a. Converts pos to a string and replaces the operand with a concatenation of "?" and the stringified position. b. Increments pos by 1.
+
+        Writes opcode and operand to deftab.txt.
+
+        Reads the next set of label, opcode, and operand.
+
+        Writes the final opcode to deftab.txt. d. If the opcode is not "MACRO": i. Reads a name from namtab.txt. ii. Checks if the name matches the opcode:
+
+        Processes the operand, separates elements by comma, and writes them to argtab.txt.
+
+        Reads from deftab.txt and writes the output to output.txt. iii. Enters a loop until opcode1 is not "MEND":
+
+        Checks if the operand1 starts with '?': a. Reads an argument from argtab.txt and writes it to output.txt.
+
+        Otherwise, writes the operand1 to output.txt.
+
+        Reads the next set of opcode1 and operand1. iv. If the opcode does not match any names, writes label, opcode, and operand to output.txt.
+
+    Finally, writes the last label, opcode, and operand to output.txt.
+
+    End of program

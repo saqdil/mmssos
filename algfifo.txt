@@ -1,0 +1,39 @@
+algfifo
+
+    Start
+
+    Initialize variables: a. pages array to store the reference string b. frames array to store the frames in memory c. fCount to store the number of frames
+
+    pCount to store the number of pages
+
+    Prompt the user to enter the number of frames and store it in fCount.
+
+    Create the frames array with fCount elements and initialize each element to -1.
+
+    Prompt the user to enter the number of pages and store it in pCount.
+
+    Prompt the user to enter the reference string and store it in the pages array.
+
+    Print a header line with "Ref.String" and "Frames".
+
+    Print a line of dashes to separate the header and the data.
+
+    For each page in the reference string: a. Print the current page number. b. Set a flag to 0. c. Check if the current page is present in any frame: i. For each frame:
+
+        If the current page is present in the current frame, set the flag to 1 and print "Hit".
+
+        Break the loop if the page is found. d. If the page is not found in any frame (flag is 0):
+
+        Insert the current page into the frames array at the queue position.
+
+        Increment the faultCount.
+
+        Update the queue position:
+
+        If the queue position is equal to the fCount, reset it to 0.
+
+        Print the contents of the frames array. e. Print a new line.
+
+    Print the total number of page faults.
+
+    End

@@ -1,0 +1,78 @@
+DATA SEGMENT
+    MSG_PROMPT DB 'Enter a number: $'
+    MSG_EVEN   DB 0AH,0DH,'The number is EVEN.$'
+    MSG_ODD    DB 0AH,0DH,'The number is ODD.$'
+DATA ENDS
+
+CODE SEGMENT
+    ASSUME CS:CODE, DS:DATA
+    
+START:
+    MOV AX, DATA
+    MOV DS, AX
+
+    LEA DX, MSG_PROMPT
+    MOV AH, 09H
+    INT 21H
+
+    CALL READ_16BIT_NUM
+    
+    TEST AL, 01H
+    
+    JZ PRINT_EVEN
+
+PRINT_ODD:
+    LEA DX, MSG_ODD
+    MOV AH, 09H
+    INT 21H
+    JMP EXIT 
+
+PRINT_EVEN:
+    LEA DX, MSG_EVEN
+    MOV AH, 09H
+    INT 21H
+
+EXIT:
+    MOV AH, 4CH
+    INT 21H
+
+READ_16BIT_NUM PROC
+    PUSH BX
+    PUSH CX
+    PUSH DX
+
+    XOR AX, AX
+
+    READ_CHAR:
+    PUSH AX
+    MOV AH, 01H
+    INT 21H
+    MOV BL, AL
+    POP AX
+
+    CMP BL, 0Dh
+    JE READ_DONE
+
+    SUB BL, '0'
+    XOR CX, CX
+    MOV CL, BL
+
+    PUSH CX
+
+    MOV BX, 10
+    MUL BX
+
+    POP CX
+    ADD AX, CX
+
+    JMP READ_CHAR
+
+    READ_DONE:
+    POP DX
+    POP CX
+    POP BX
+    RET
+READ_16BIT_NUM ENDP
+
+CODE ENDS
+END START

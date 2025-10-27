@@ -1,0 +1,55 @@
+sjf
+
+    Start
+
+    Declare an array 'b[]' to store burst times.
+
+    For each process 'i' from 0 to 'n-1':
+
+    Prompt the user to enter the burst time and assign it to 'b[i]'.
+
+    Initialize arrays 'wt[20]', 'tat[20]' to store waiting times and turnaround times.
+
+    Initialize variables 'tatAvg', 'wtAvg' to store average turnaround time and average waiting time.
+
+    Declare variables 'i', 'j', 'n', 'pld[20]' to store loop indices, number of processes, and process IDs.
+
+    Define a function 'swap' that takes two integer pointers and swaps their values.
+
+    Define a function 'sort' that takes an array 'b[]' of burst times and sorts it in ascending order using the Bubble Sort algorithm. Also, swap corresponding process IDs in the 'pld[]' array.
+
+    Define a function 'read' that takes an array 'b[]' as input.
+
+    For each process 'i' from 0 to 'n-1':
+
+    Prompt the user to enter the burst time and process ID.
+
+    Sort the burst times using the 'sort' function.
+
+    Define a function 'findWaitingtime' that calculates the waiting time for each process and the average waiting time.
+
+    Initialize 'wt[0]' to 0.
+
+    For each process 'i' from 1 to 'n-1': a. Calculate 'wt[i] = wt[i - 1]+b[i - 1]'. b. Calculate the average waiting time 'wtAvg'.
+
+    Define a function 'find Turn Aroundtime' that calculates the turnaround time for each process and the average turnaround time.
+
+    For each process 'i' from 0 to ′n−1′: a. Calculate 'tat[i] =b[i]+wt[i]′.
+
+    Calculate the average turnaround time 'tatAvg'.
+
+    Define a function 'display' that displays the process details, including process ID, burst time, waiting time, and turnaround time.
+
+    Print the table header: "Process BurstTime Waiting Time TurnAroundTime".
+
+    For each process 'i' from 0 to 'n-1': a. Print process details: process ID 'pld[i]', burst time 'b[i]', waiting time 'wt[i]', turnaround time 'tat[i]'.
+
+    Print the average waiting time and average turnaround time.
+
+    Define a function 'calcTime' that takes an array 'b[]' as input.
+
+    Call 'findWaitingTime(b, wt)' to calculate waiting time.
+
+    Call 'findTurnAroundTime(tat, b, wt)' to calculate turnaround time.
+
+    Call 'display(b, wt, tat)' to display process details and averages

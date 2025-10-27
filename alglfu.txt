@@ -1,0 +1,27 @@
+alglfu
+
+    Start
+
+    Prompt the user to enter the number of pages (n).
+
+    Prompt the user to enter the reference string (p).
+
+    Prompt the user to enter the number of frames (f).
+
+    Initialize variables: a. q: An array of size 20 to store the frames in memory. b. p: An array of size 50 to store the reference string. c. c: An integer variable to track the number of page faults. d. c1: An integer variable to use as a temporary counter. e. d: An integer variable to use as a temporary index. f. f: An integer variable to store the number of frames (read from user input). g. i: An integer variable to use as a loop counter. h. j: An integer variable to use as a nested loop counter. i. k: An integer variable to track the index of the next frame to be filled. j. n: An integer variable to store the number of pages (read from user input). k. r: An integer variable to use as a temporary index. l. t: An integer variable to use for temporary swapping. m. b: An array of size 20 to store the recency counts of pages in frames. n. c2: An array of size 20 to store the recency counts of pages in frames.
+
+    Initialize the first frame with the first page from the reference string.
+
+    For each page in the reference string (starting from index 1): a. Check if the current page is already present in any frame (q). i. If the page is present, continue to the next page. ii. If the page is not present, increment the page fault count (c). iii. If there is an empty frame (k<f), insert the page into the empty frame and increment k. iv. If there are no empty frames (k==f), determine the Least Recently Used (LRU) frame using the following steps:
+
+    For each frame (r), calculate the recency count (c2[r]) of the page in that frame. a. For each page in the reference string (p[j]) (starting from j=i−1 and going backwards until a match is found): i. If q[r] is equal to p[j], the page is recently used. Break the loop. ii. If q[r] is not equal to p[j], increment c2[r].
+
+    Sort the recency counts (b) in ascending order.
+
+    Replace the page in the LRU frame (the frame at index r with the minimum recency count) with the current page (p[i]).
+
+    Print the contents of the q array for each iteration.
+
+    Print the total number of page faults (c).
+
+    End

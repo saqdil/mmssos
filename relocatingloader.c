@@ -14,7 +14,7 @@ void main()
     FILE *fp1,*fp2;
     printf("\nEnter the actual starting address : ");
     scanf("%x",&start);
-    fp1=fopen("RLIN.txt","r");
+    fp1=fopen("relocatingloaderinput.txt","r");
     fp2=fopen("RLOUT.txt","w");
     fscanf(fp1,"%s",input);
     fprintf(fp2," ----------------------------\n");
