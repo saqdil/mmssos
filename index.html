@@ -1,39 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MMSS Lab Programs</title>
-  <style>
-    body { font-family: system-ui, sans-serif; background: #0f172a; color: #e2e8f0; margin: 0; padding: 2rem; }
-    h1 { color: #38bdf8; }
-    ul { list-style: none; padding: 0; }
-    li { margin: 8px 0; }
-    a { color: #bae6fd; text-decoration: none; font-weight: 500; }
-    a:hover { text-decoration: underline; color: #38bdf8; }
-    .card { background: #1e293b; border-radius: 8px; padding: 1rem 1.5rem; box-shadow: 0 0 10px rgba(0,0,0,0.2); max-width: 600px; }
-  </style>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="card">
-    <h1>MMSS Lab Programs</h1>
-    <ul id="file-list"></ul>
+  <h1>MMSS Lab Programs</h1>
+
+  <div class="file-list">
+    <h2>Assembly Programs</h2>
+    <ul>
+      <li><a href="viewer.html?file=16bitaddition.asm">16bitaddition.asm</a></li>
+      <li><a href="viewer.html?file=16bitsearching.asm">16bitsearching.asm</a></li>
+      <li><a href="viewer.html?file=16bitsorting.asm">16bitsorting.asm</a></li>
+      <li><a href="viewer.html?file=16bitsorting+.asm">16bitsorting+.asm</a></li>
+      <li><a href="viewer.html?file=16bitsubtraction.asm">16bitsubtraction.asm</a></li>
+      <li><a href="viewer.html?file=oddeven.asm">oddeven.asm</a></li>
+      <li><a href="viewer.html?file=oddeven+.asm">oddeven+.asm</a></li>
+      <li><a href="viewer.html?file=palindrome.asm">palindrome.asm</a></li>
+    </ul>
+
+    <h2>C Programs</h2>
+    <ul>
+      <li><a href="viewer.html?file=absoluteloader.c">absoluteloader.c</a></li>
+      <li><a href="viewer.html?file=bankers.c">bankers.c</a></li>
+      <li><a href="viewer.html?file=cscan.c">cscan.c</a></li>
+      <li><a href="viewer.html?file=fcfs.c">fcfs.c</a></li>
+      <li><a href="viewer.html?file=fcfsdisk.c">fcfsdisk.c</a></li>
+      <li><a href="viewer.html?file=fifo.c">fifo.c</a></li>
+      <li><a href="viewer.html?file=lfu.c">lfu.c</a></li>
+      <li><a href="viewer.html?file=linked.c">linked.c</a></li>
+      <li><a href="viewer.html?file=lru.c">lru.c</a></li>
+      <li><a href="viewer.html?file=onepassmacro.c">onepassmacro.c</a></li>
+      <li><a href="viewer.html?file=pass1.c">pass1.c</a></li>
+      <li><a href="viewer.html?file=pass2.c">pass2.c</a></li>
+      <li><a href="viewer.html?file=priority.c">priority.c</a></li>
+      <li><a href="viewer.html?file=relocatingloader.c">relocatingloader.c</a></li>
+      <li><a href="viewer.html?file=rr.c">rr.c</a></li>
+      <li><a href="viewer.html?file=scan.c">scan.c</a></li>
+      <li><a href="viewer.html?file=sequential.c">sequential.c</a></li>
+      <li><a href="viewer.html?file=sjf.c">sjf.c</a></li>
+    </ul>
+
+    <h2>Algorithm and Input/Text Files</h2>
+    <ul>
+      <li><a href="viewer.html?file=absoluteLoaderInput.txt">absoluteLoaderInput.txt</a></li>
+      <li><a href="viewer.html?file=onepassmacroinput.txt">onepassmacroinput.txt</a></li>
+      <li><a href="viewer.html?file=pass1input.txt">pass1input.txt</a></li>
+      <li><a href="viewer.html?file=pass1optab.txt">pass1optab.txt</a></li>
+      <li><a href="viewer.html?file=pass2intermediate.txt">pass2intermediate.txt</a></li>
+      <li><a href="viewer.html?file=pass2symtab.txt">pass2symtab.txt</a></li>
+      <li><a href="viewer.html?file=relocatingloaderinput.txt">relocatingloaderinput.txt</a></li>
+      <li><a href="viewer.html?file=alg16bitaddition.txt">alg16bitaddition.txt</a></li>
+      <li><a href="viewer.html?file=alg16bitsearching.txt">alg16bitsearching.txt</a></li>
+      <li><a href="viewer.html?file=alg16bitsorting.txt">alg16bitsorting.txt</a></li>
+      <li><a href="viewer.html?file=alg16bitsorting+.txt">alg16bitsorting+.txt</a></li>
+      <li><a href="viewer.html?file=alg16bitsubtract.txt">alg16bitsubtract.txt</a></li>
+      <li><a href="viewer.html?file=algabsoluteloader.txt">algabsoluteloader.txt</a></li>
+      <li><a href="viewer.html?file=algcscan.txt">algcscan.txt</a></li>
+      <li><a href="viewer.html?file=algfcfs.txt">algfcfs.txt</a></li>
+      <li><a href="viewer.html?file=algfcfsdisk.txt">algfcfsdisk.txt</a></li>
+      <li><a href="viewer.html?file=algfifo.txt">algfifo.txt</a></li>
+      <li><a href="viewer.html?file=algindexed.txt">algindexed.txt</a></li>
+      <li><a href="viewer.html?file=alglfu.txt">alglfu.txt</a></li>
+      <li><a href="viewer.html?file=alglinked.txt">alglinked.txt</a></li>
+      <li><a href="viewer.html?file=alglru.txt">alglru.txt</a></li>
+      <li><a href="viewer.html?file=algonepassmacro.txt">algonepassmacro.txt</a></li>
+      <li><a href="viewer.html?file=algpalindrome.txt">algpalindrome.txt</a></li>
+      <li><a href="viewer.html?file=algpass1.txt">algpass1.txt</a></li>
+      <li><a href="viewer.html?file=algpass2.txt">algpass2.txt</a></li>
+      <li><a href="viewer.html?file=algpriority.txt">algpriority.txt</a></li>
+      <li><a href="viewer.html?file=algrelocatingloader.txt">algrelocatingloader.txt</a></li>
+      <li><a href="viewer.html?file=algrr.txt">algrr.txt</a></li>
+      <li><a href="viewer.html?file=algscan.txt">algscan.txt</a></li>
+      <li><a href="viewer.html?file=algsequential.txt">algsequential.txt</a></li>
+      <li><a href="viewer.html?file=algsjf.txt">algsjf.txt</a></li>
+    </ul>
   </div>
-
-  <script>
-    const files = [
-      "16bitaddition.asm", "16bitsearching.asm", "16bitsorting.asm", "16bitsorting+.asm", "16bitsubtract.asm",
-      "absoluteloader.c", "bankers.c", "cscan.c", "fcfs.c", "fcfsdisk.c", "fifo.c", "indexed.c", "lfu.c",
-      "linked.c", "lru.c", "onepassmacro.c", "palindrome.asm", "pass1.c", "pass2.c", "priority.c",
-      "relocatingloader.c", "rr.c", "scan.c", "sequential.c", "sjf.c", "help.txt"
-    ];
-
-    const list = document.getElementById('file-list');
-    files.forEach(file => {
-      const li = document.createElement('li');
-      li.innerHTML = `<a href="viewer.html?file=${encodeURIComponent(file)}">${file}</a>`;
-      list.appendChild(li);
-    });
-  </script>
 </body>
 </html>
