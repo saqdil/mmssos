@@ -1,61 +1,44 @@
-16bitaddition.asm
-16bitsearching.asm
-16bitsorting.asm
-16bitsorting+.asm
-16bitsubtraction.asm
-absoluteloader.c
-absoluteloaderinput.txt
-alg16bitaddition.txt
-alg16bitsearching.txt
-alg16bitsorting.txt
-alg16bitsorting+.txt
-alg16bitsubtract.txt
-algabsoluteloader.txt
-algcscan.txt
-algfcfs.txt
-algfcfsdisk.txt
-algfifo.txt
-algindexed.txt
-alglfu.txt
-alglinked.txt
-alglru.txt
-algonepassmacro.txt
-algpalindrome.txt
-algpass1.txt
-algpass2.txt
-algpriority.txt
-algrelocatingloader.txt
-algrr.txt
-algscan.txt
-algsequential.txt
-algsjf.txt
-bankers.c
-cscan.c
-fcfs.c
-fcfsdisk.c
-fifo.c
-help.txt
-index.html
-indexed
-lfu.c
-linked.c
-lru.c
-oddeven.asm
-oddeven+.asm
-onepassmacro.c
-onepassmacroinput.txt
-palindrome.asm
-pass1.c
-pass1input.txt
-pass1optab.txt
-pass2.c
-pass2intermediate.txt
-pass2symtab.txt
-priority.c
-relocatingloader.c
-relocatingloaderinput.txt
-rr.c
-scan.c
-script.js
-sequential.c
-sjf.c
+==========================
+   MMS-OS LAB PROGRAMS
+==========================
+
+Assembly Programs
+--------------------------
+16bitaddition.asm     16bitsearching.asm     16bitsorting.asm  
+16bitsorting+.asm     16bitsubtraction.asm   oddeven.asm  
+oddeven+.asm          palindrome.asm  
+
+
+C Programs
+--------------------------
+absoluteloader.c      bankers.c              cscan.c  
+fcfs.c                fcfsdisk.c             fifo.c  
+indexed.c             lfu.c                  linked.c  
+lru.c                 onepassmacro.c         pass1.c  
+pass2.c               priority.c             relocatingloader.c  
+rr.c                  scan.c                 sequential.c  
+sjf.c  
+
+
+Algorithm Files
+--------------------------
+alg16bitaddition.txt   alg16bitsearching.txt   alg16bitsorting.txt  
+alg16bitsorting+.txt    alg16bitsubtract.txt    algabsoluteloader.txt  
+algcscan.txt            algfcfs.txt             algfcfsdisk.txt  
+algfifo.txt             algindexed.txt          alglfu.txt  
+alglinked.txt           alglru.txt              algonepassmacro.txt  
+algpalindrome.txt       algpass1.txt            algpass2.txt  
+algpriority.txt         algrelocatingloader.txt algrr.txt  
+algscan.txt             algsequential.txt       algsjf.txt  
+
+
+Input / Support Files
+--------------------------
+absoluteloaderinput.txt   onepassmacroinput.txt   pass1input.txt  
+pass1optab.txt            pass2intermediate.txt   pass2symtab.txt  
+relocatingloaderinput.txt  
+
+
+Other Files
+--------------------------
+help.txt   index.html   script.js
