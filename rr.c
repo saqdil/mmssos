@@ -1,131 +1,120 @@
 #include <stdio.h>
+#include <string.h>
 
+// Define a struct for process
 struct Process {
-    int pid;
-    int at;
-    int bt;
-    int rt; // remaining time
-    int ct;
-    int tat;
-    int wt;
+    char name[10];
+    int arrivalTime, burstTime, remainingTime, waitingTime, turnaroundTime, completionTime;
 };
 
-struct Gantt {
-    int pid;
-    int start;
-    int end;
-};
-
-void main() {
-    int n, tq;
-    printf("Enter the number of processes: ");
+int main() {
+    int n, timeQuantum;
+    printf("Enter number of processes: ");
     scanf("%d", &n);
 
     struct Process p[n];
-    struct Gantt gc[100];
-int gc_index = 0;
-    int completed = 0;
-    int time = 0;
-    int queue[100]; // to simulate ready queue
-    int front = 0, rear = 0;
 
     for (int i = 0; i < n; i++) {
-        printf("Enter arrival time for process %d: ", i);
-        scanf("%d", &p[i].at);
-        printf("Enter burst time for process %d: ", i);
-        scanf("%d", &p[i].bt);
-        p[i].pid = i;
-        p[i].rt = p[i].bt;
-        p[i].ct = 0;
+        printf("Enter name, arrival time, burst time for process %d: ", i + 1);
+        scanf("%s %d %d", p[i].name, &p[i].arrivalTime, &p[i].burstTime);
+        p[i].remainingTime = p[i].burstTime;
+        p[i].waitingTime = 0;
+        p[i].turnaroundTime = 0;
+        p[i].completionTime = 0;
     }
 
     printf("Enter Time Quantum: ");
-    scanf("%d", &tq);
+    scanf("%d", &timeQuantum);
 
-    int visited[n];
-    for(int i = 0; i < n; i++) visited[i] = 0;
+    int t = 0; // current time
+    int done;
+    int index = 0; // Gantt chart position
 
-    // Enqueue first arrived processes
-    for(int i = 0; i < n; i++) {
-        if(p[i].at == time) {
-            queue[rear++] = i;
-            visited[i] = 1;
-        }
-    }
+    char gantt[200][10];  // To store names of processes executed (max 200 segments)
+    int timeLine[200];    // To store corresponding time instants
 
     printf("\nGantt Chart:\n");
-printf(" ");
 
-int start_time = 0;
+    while (1){
+        done = 1;
+        int found = 0; // track if any process is ready at this time
 
-while(completed < n) {
-    if(front == rear) {
-        time++;
-        for(int i = 0; i < n; i++) {
-            if(p[i].at == time && visited[i] == 0) {
-                queue[rear++] = i;
-                visited[i] = 1;
+        // Go through each process
+        for (int i = 0; i < n; i++) {
+            if (p[i].remainingTime > 0 && p[i].arrivalTime <= t) {
+                found = 1;
+                done = 0;
+
+                strcpy(gantt[index], p[i].name);
+                timeLine[index] = t;
+                index++;
+
+                if (p[i].remainingTime > timeQuantum) {
+                    t += timeQuantum;
+                    p[i].remainingTime -= timeQuantum;
+                } else {
+                    t += p[i].remainingTime;
+                    p[i].waitingTime = t - p[i].burstTime - p[i].arrivalTime;
+                    p[i].completionTime = t;
+                    p[i].remainingTime = 0;
+                }
             }
         }
-        continue;
-    }
 
-    int idx = queue[front++];
+        // If CPU is idle (no ready process found)
+        if (!found) {
+            int earliestArrival = 1e9;
+            for (int i = 0; i < n; i++) {
+                if (p[i].remainingTime > 0 && p[i].arrivalTime < earliestArrival) {
+                    earliestArrival = p[i].arrivalTime;
+                }
+            }
+            if (earliestArrival != 1e9 && earliestArrival > t) {
+                // CPU is idle till the next process arrives
+                strcpy(gantt[index], "idle");
+                timeLine[index] = t;
+                index++;
+                t = earliestArrival; // jump to next arrival time
+            }
+        }
 
-    int exec_time = (p[idx].rt > tq) ? tq : p[idx].rt;
-    start_time = time;
-    time += exec_time;
-    p[idx].rt -= exec_time;
-    gc[gc_index].pid = p[idx].pid;
-    gc[gc_index].start = start_time;
-    gc[gc_index].end = time;
-    gc_index++;
-
-
-    // Print process box
-    //printf("| P[%d] ", p[idx].pid+1);
-
-    // Enqueue newly arrived processes
-    for(int i = 0; i < n; i++) {
-        if(p[i].at > (time - exec_time) && p[i].at <= time && visited[i] == 0) {
-            queue[rear++] = i;
-            visited[i] = 1;
+        // Check if all processes are done
+        int allDone = 1;
+        for (int i = 0; i < n; i++) {
+            if (p[i].remainingTime > 0) {
+                allDone = 0;
+                break;
+            }
+        }
+        if (allDone==1) {
+            timeLine[index] = t; // final time
+            break;
         }
     }
 
-    // If not completed, requeue
-    if(p[idx].rt > 0) {
-        queue[rear++] = idx;
-    } else {
-        p[idx].ct = time;
-        p[idx].tat = p[idx].ct - p[idx].at;
-        p[idx].wt = p[idx].tat - p[idx].bt;
-        completed++;
+    // Print Gantt chart
+    for (int i = 0; i < index; i++) {
+        printf("\t| %s ", gantt[i]);
     }
-}
-printf("|\n");
+    printf("\t|\n");
 
-// Time markers
-printf("\nGantt Chart:\n ");
-for (int i = 0; i < gc_index; i++) {
-    printf("| P[%d]\t", gc[i].pid + 1);
-}
-printf("|\n");
+    for (int i = 0; i <= index; i++) {
+        printf("\t%-5d", timeLine[i]);
+    }
+    printf("\n");
 
-for (int i = 0; i < gc_index; i++) {
-    printf("%d\t", gc[i].start);
-}
-printf("%d\n", gc[gc_index - 1].end);
-printf("\n");
-    // Print Table
-    printf("\n\n\tPID\tAT\tBT\tCT\tTAT\tWT\n");
-    float total_tat = 0, total_wt = 0;
-    for(int i = 0; i < n; i++) {
-        printf("\t%d\t%d\t%d\t%d\t%d\t%d\n", p[i].pid, p[i].at, p[i].bt, p[i].ct, p[i].tat, p[i].wt);
-        total_tat += p[i].tat;
-        total_wt += p[i].wt;
+    // Calculate turnaround times
+    for (int i = 0; i < n; i++) {
+        p[i].turnaroundTime = p[i].completionTime - p[i].arrivalTime;
     }
 
-    printf("\nAverage Turnaround Time: %.2f", total_tat/n);
-    printf("\nAverage Waiting Time: %.2f\n", total_wt/n);
+    // Display results
+    printf("\nProcess\tArrival\tBurst\tWaiting\tTurnaround\tCompletion\n");
+    for (int i = 0; i < n; i++) {
+        printf("%s\t%d\t%d\t%d\t%d\t\t%d\n",
+               p[i].name, p[i].arrivalTime, p[i].burstTime,
+               p[i].waitingTime, p[i].turnaroundTime, p[i].completionTime);
+    }
+
+    return 0;
 }
