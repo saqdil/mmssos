@@ -1,126 +1,104 @@
-#include<stdio.h>
-#include<string.h>
-#include<stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
-void convert(char h[12]);
+#define MAX_BITMASK 1000   // enough to hold expanded binary for large bitmasks
 
-char bitmask[12];
-char bit[12]={0};
+char bit[MAX_BITMASK];     // stores binary expansion of bitmask
 
-void main()
-{
-    char add[6],length[10],input[10],binary[12],relocbit,ch,pn[5];
-    int start,inp,len,i,address,opcode,addr,actualadd,tlen;
-    FILE *fp1,*fp2;
-    printf("\nEnter the actual starting address : ");
-    scanf("%x",&start);
-    fp1=fopen("relocatingloaderinput.txt","r");
-    fp2=fopen("RLOUT.txt","w");
-    fscanf(fp1,"%s",input);
-    fprintf(fp2," ----------------------------\n");
-    fprintf(fp2," ADDRESS\tCONTENT\n");
-    fprintf(fp2," ----------------------------\n");
-    while(strcmp(input,"E")!=0)
-    {
-        if(strcmp(input,"H")==0)
-        {
-            fscanf(fp1,"%s",pn);
-            fscanf(fp1,"%s",add);
-            fscanf(fp1,"%s",length);
-            fscanf(fp1,"%s",input);
-        }
-        if(strcmp(input,"T")==0)
-        {
-            fscanf(fp1,"%x",&address);
-
-            fscanf(fp1,"%x",&tlen);
-            fscanf(fp1,"%s",bitmask);
-            address+=start;
-            convert(bitmask);
-            len=strlen(bit);
-            if(len>=11)
-                len=10;
-            for(i=0;i<len;i++)
-            {
-                fscanf(fp1,"%x",&opcode);
-                fscanf(fp1,"%x",&addr);
-                relocbit=bit[i];
-                if(relocbit=='0')
-                    actualadd=addr;
-                else
-                    actualadd=addr+start;
-                fprintf(fp2,"\n %x\t\t%x%x\n",address,opcode,actualadd);
-                address+=3;
-            }
-            fscanf(fp1,"%s",input);
+// Convert hex string (bitmask) to binary string (4 bits per hex)
+void convert(char hex[]) {
+    strcpy(bit, "");
+    for (int i = 0; hex[i] != '\0'; i++) {
+        switch (hex[i]) {
+            case '0': strcat(bit, "0000"); break;
+            case '1': strcat(bit, "0001"); break;
+            case '2': strcat(bit, "0010"); break;
+            case '3': strcat(bit, "0011"); break;
+            case '4': strcat(bit, "0100"); break;
+            case '5': strcat(bit, "0101"); break;
+            case '6': strcat(bit, "0110"); break;
+            case '7': strcat(bit, "0111"); break;
+            case '8': strcat(bit, "1000"); break;
+            case '9': strcat(bit, "1001"); break;
+            case 'A': case 'a': strcat(bit, "1010"); break;
+            case 'B': case 'b': strcat(bit, "1011"); break;
+            case 'C': case 'c': strcat(bit, "1100"); break;
+            case 'D': case 'd': strcat(bit, "1101"); break;
+            case 'E': case 'e': strcat(bit, "1110"); break;
+            case 'F': case 'f': strcat(bit, "1111"); break;
         }
     }
-    fprintf(fp2," ----------------------------\n");
-    fclose(fp2);
-    fclose(fp1);
-    printf("Successfully implemented relocating loader.\n");
 }
 
-void convert(char h[12])
-{
-    int i,l;
-    strcpy(bit,"");
-    l=strlen(h);
+int main() {
+    FILE *fp_in, *fp_out;
+    char record[10];
+    int start_addr;
 
-    for(i=0;i<l;i++)
-    {
-        switch(h[i])
-        {
-            case '0':
-                strcat(bit,"0");
-                break;
-            case '1':
-                strcat(bit,"1");
-                break;
-            case '2':
-                strcat(bit,"10");
-                break;
-            case '3':
-                strcat(bit,"11");
-                break;
-            case '4':
-                strcat(bit,"100");
-                break;
-            case '5':
-                strcat(bit,"101");
-                break;
-            case '6':
-                strcat(bit,"110");
-                break;
-            case '7':
-                strcat(bit,"111");
-                break;
-            case '8':
-                strcat(bit,"1000");
-                break;
-            case '9':
+    printf("Enter the actual starting address (hex): ");
+    scanf("%x", &start_addr);
 
-                strcat(bit,"1001");
-                break;
-            case 'A':
-                strcat(bit,"1010");
-                break;
-            case 'B':
-                strcat(bit,"1011");
-                break;
-            case 'C':
-                strcat(bit,"1100");
-                break;
-            case 'D':
-                strcat(bit,"1101");
-                break;
-            case 'E':
-                strcat(bit,"1110");
-                break;
-            case 'F':
-                strcat(bit,"1111");
-                break;
+    fp_in = fopen("input.txt", "r");
+    if (!fp_in) {
+        printf("Error: input.txt not found!\n");
+        return 1;
+    }
 
+    fp_out = fopen("output.txt", "w");
+    fprintf(fp_out, "----------------------------\n");
+    fprintf(fp_out, "ADDRESS\t\tCONTENT\n");
+    fprintf(fp_out, "----------------------------\n");
+
+    while (fscanf(fp_in, "%s", record) != EOF) {
+        if (strcmp(record, "E") == 0) {
+            break;  // End record → stop processing
+        }
+
+        else if (strcmp(record, "H") == 0) {
+            char progname[10], progaddr[10], length[10];
+            fscanf(fp_in, "%s %s %s", progname, progaddr, length);
+        }
+
+        else if (strcmp(record, "T") == 0) {
+            int text_addr, tlen;
+            char bitmask_hex[50];
+
+            fscanf(fp_in, "%x %x %s", &text_addr, &tlen, bitmask_hex);
+            text_addr += start_addr;
+
+            convert(bitmask_hex);
+            int bit_len = strlen(bit);
+
+            for (int i = 0; i < bit_len; i++) {
+                int opcode, addr;
+
+                // Stop if we reach EOF
+                if (fscanf(fp_in, "%x %x", &opcode, &addr) != 2)
+                    break;
+
+                int actual_addr = (bit[i] == '1') ? addr + start_addr : addr;
+                fprintf(fp_out, "%04X\t\t%02X%04X\n", text_addr, opcode, actual_addr);
+                text_addr += 3;
+            }
+        }
+        else {
+            // Skip unknown records
+            continue;
         }
     }
+
+    fprintf(fp_out, "----------------------------\n");
+    fclose(fp_in);
+    fclose(fp_out);
+
+    printf("\nRelocation complete! Output written to output.txt\n");
+
+    // Display output file
+    fp_out = fopen("output.txt", "r");
+    char ch;
+    while ((ch = fgetc(fp_out)) != EOF) putchar(ch);
+    fclose(fp_out);
+
+    return 0;
 }
