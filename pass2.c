@@ -2,164 +2,143 @@
 #include <stdlib.h>
 #include <string.h>
 
-void displayFile(const char *filename) {
-    FILE *fp = fopen(filename, "r");
-    if (!fp) {
-        printf("Cannot open %s\n", filename);
-        return;
+struct SYMBOL {
+    char label[10];
+    int addr;
+} SYMTAB[50];
+
+struct OPCODE {
+    char mnemonic[10];
+    char hexcode[10];
+} OPTAB[50];
+
+int main() {
+    FILE *fp_intermediate, *fp_optab, *fp_symtab, *fp_obj, *fp_len;
+    int locctr, start_addr, prog_len;
+    int sym_count = 0, op_count = 0;
+    char label[20], opcode[20], operand[20];
+    char text_record[80], current_obj_code[20];
+    int text_record_len = 0, text_record_start_addr = 0;
+
+    // --- 1. LOAD OPTAB INTO MEMORY ---
+    fp_optab = fopen("optab.txt", "r");
+    while (fscanf(fp_optab, "%s %s", OPTAB[op_count].mnemonic, OPTAB[op_count].hexcode) == 2) {
+        op_count++;
     }
-    printf("\nContents of %s:\n", filename);
-    char ch;
-    while ((ch = fgetc(fp)) != EOF)
-        putchar(ch);
-    fclose(fp);
-}
+    fclose(fp_optab);
 
-void passTwo() {
-    char label[10], opcode[10], operand[10], code[10], mnemonic[3];
-    int loc;
-    FILE *fp1, *fp2, *fp3, *fp4;
-
-    fp1 = fopen("pass2intermediate.txt", "r");
-    fp2 = fopen("optab.txt", "r");
-    fp3 = fopen("pass2symtab.txt", "r");
-    fp4 = fopen("output.txt", "w");
-
-    if (!fp1 || !fp2 || !fp3 || !fp4) {
-        printf("Error opening files\n");
-        return;
+    // --- 2. LOAD SYMTAB INTO MEMORY ---
+    fp_symtab = fopen("symtab.txt", "r");
+    while (fscanf(fp_symtab, "%s %x", SYMTAB[sym_count].label, &SYMTAB[sym_count].addr) == 2) { //
+        sym_count++;
     }
+    fclose(fp_symtab);
 
-    char temp[50];
-    char progName[20] = "";
-    fgets(temp, sizeof(temp), fp1);
-    sscanf(temp, "%s %s %s", progName, opcode, operand);
+    // --- 3. READ PROGRAM LENGTH ---
+    fp_len = fopen("length.txt", "r"); //
+    fscanf(fp_len, "%x", &prog_len);
+    fclose(fp_len);
 
-    int startAddr = 0;
-    if (strcmp(opcode, "START") == 0) {
-        startAddr = (int)strtol(operand, NULL, 16);
-    }
+    // --- 4. OPEN FILES ---
+    fp_intermediate = fopen("intermediate.txt", "r");
+    fp_obj = fopen("objcode.txt", "w");
 
-    // Prepare to collect text record object codes in-memory
-    char textBuf[8192] = "";
-    int textBytes = 0; // length in bytes of object codes
-    int textStart = 0;
-    int firstCode = 1;
+    // --- 5. READ FIRST LINE (START line) ---
+    fscanf(fp_intermediate, "\t%s\t%s\t%s", label, opcode, operand);
+    start_addr = (int)strtol(operand, NULL, 16);
 
-    // read first actual instruction line after header
-    if (fscanf(fp1, "%X %s %s %s", &loc, label, opcode, operand) != 4) {
-        // nothing to process
-        fprintf(fp4, "H^%s^%06X^%06X\n", progName, startAddr, 0);
-        fprintf(fp4, "E^%06X\n", startAddr);
-        fclose(fp1); fclose(fp2); fclose(fp3); fclose(fp4);
-        printf("\nPass 2 completed. Output written to output.txt\n");
-        displayFile("output.txt");
-        return;
-    }
+    fprintf(fp_obj, "H^%-6s^%06X^%06X\n", label, start_addr, prog_len);
 
-    textStart = loc;
+    // --- 6. READ NEXT LINE (first instruction) ---
+    fscanf(fp_intermediate, "%x\t%s\t%s\t%s", &locctr, label, opcode, operand);
+    text_record_start_addr = locctr;
+    strcpy(text_record, "");
 
+    // --- 7. PROCESS EACH LINE UNTIL "END" ---
     while (strcmp(opcode, "END") != 0) {
-        int found = 0;
-        rewind(fp2);
-        // check optab for opcode
-        while (fscanf(fp2, "%s %s", code, mnemonic) != EOF) {
-            if (strcmp(opcode, code) == 0) {
-                char symLabel[10];
-                int symLoc;
-                rewind(fp3);
-                int symFound = 0;
-                while (fscanf(fp3, "%s %X", symLabel, &symLoc) != EOF) {
-                    if (strcmp(operand, symLabel) == 0) {
-                        symFound = 1;
-                        break;
-                    }
-                }
-                char obj[32];
-                if (symFound) sprintf(obj, "%s%04X", mnemonic, symLoc);
-                else sprintf(obj, "%s0000", mnemonic);
+        char machine_opcode[10] = "";
+        char operand_addr[10] = "0000";
 
-                if (firstCode) {
-                    strcat(textBuf, obj);
-                    firstCode = 0;
-                } else {
-                    strcat(textBuf, "^");
-                    strcat(textBuf, obj);
-                }
-                textBytes += 3; // machine instruction typically 3 bytes
-                found = 1;
+        // Search opcode in OPTAB
+        for (int i = 0; i < op_count; i++) {
+            if (strcmp(opcode, OPTAB[i].mnemonic) == 0) {
+                strcpy(machine_opcode, OPTAB[i].hexcode);
                 break;
             }
         }
 
-        if (!found) {
-            if (strcmp(opcode, "WORD") == 0) {
-                int val = atoi(operand);
-                char obj[16];
-                sprintf(obj, "%06X", val);
-                if (firstCode) { strcat(textBuf, obj); firstCode = 0; }
-                else { strcat(textBuf, "^"); strcat(textBuf, obj); }
-                textBytes += 3;
-            }
-            else if (strcmp(opcode, "BYTE") == 0) {
-                if (operand[0] == 'C') {
-                    // convert characters to hex bytes
-                    char obj[256] = "";
-                    int count = 0;
-                    for (int i = 2; operand[i] != '\''; i++) {
-                        char tmp[4];
-                        sprintf(tmp, "%02X", (unsigned char)operand[i]);
-                        strcat(obj, tmp);
-                        count++;
-                    }
-                    if (firstCode) { strcat(textBuf, obj); firstCode = 0; }
-                    else { strcat(textBuf, "^"); strcat(textBuf, obj); }
-                    textBytes += count;
-                } else if (operand[0] == 'X') {
-                    char *hexstr = operand + 2; // e.g., X'F1'
-                    // hexstr may include trailing quote - remove it
-                    char tmphex[256];
-                    strncpy(tmphex, hexstr, sizeof(tmphex)-1);
-                    tmphex[sizeof(tmphex)-1] = '\0';
-                    // remove trailing quote if present
-                    char *q = strchr(tmphex, '\'');
-                    if (q) *q = '\0';
-                    if (firstCode) { strcat(textBuf, tmphex); firstCode = 0; }
-                    else { strcat(textBuf, "^"); strcat(textBuf, tmphex); }
-                    textBytes += strlen(tmphex) / 2;
+        // Search operand in SYMTAB
+        if (strcmp(operand, "-") != 0) {
+            for (int i = 0; i < sym_count; i++) {
+                if (strcmp(operand, SYMTAB[i].label) == 0) {
+                    sprintf(operand_addr, "%04X", SYMTAB[i].addr); //first use of sprintf
+                    break;
                 }
             }
         }
 
-        if (fscanf(fp1, "%X %s %s %s", &loc, label, opcode, operand) != 4) break;
+        // --- Generate Object Code ---
+        strcpy(current_obj_code, "");
+        if (strcmp(machine_opcode, "") != 0) {
+            strcat(current_obj_code, machine_opcode);
+            strcat(current_obj_code, operand_addr);
+        }
+        else if (strcmp(opcode, "WORD") == 0) {
+            sprintf(current_obj_code, "%06X", atoi(operand)); //second use of sprintf
+        }
+        else if (strcmp(opcode, "BYTE") == 0) {
+            if (operand[0] == 'C') { // Character constant
+                for (int i = 2; i < strlen(operand) - 1; i++) {
+                    char hex_char[3];
+                    sprintf(hex_char, "%02X", operand[i]); //third use of sprintf
+                    strcat(current_obj_code, hex_char);
+                }
+            }
+            else if (operand[0] == 'X') { // Hex constant
+                for (int i = 2; i < strlen(operand) - 1; i++) {
+                    char hex_char[2] = {operand[i], '\0'};
+                    strcat(current_obj_code, hex_char);
+                }
+            }
+        }
+
+        // --- Check Text Record Length or Reserved Areas ---
+        if ((strlen(text_record) + strlen(current_obj_code) + 1) > 60 ||
+            strcmp(opcode, "RESW") == 0 || strcmp(opcode, "RESB") == 0) {
+
+            if (text_record_len > 0) {
+                fprintf(fp_obj, "T^%06X^%02X%s\n",text_record_start_addr, text_record_len, text_record);
+            }
+
+            strcpy(text_record, "");
+            text_record_len = 0;
+        }
+
+        // --- Add Object Code to Text Record ---
+        if (strcmp(opcode, "RESW") != 0 && strcmp(opcode, "RESB") != 0 && strcmp(current_obj_code, "") != 0) {
+            if (text_record_len == 0) {
+                text_record_start_addr = locctr;
+            }
+            strcat(text_record, "^");
+            strcat(text_record, current_obj_code);
+            text_record_len += (strlen(current_obj_code) / 2);
+        }
+
+        // --- Read Next Line ---
+        fscanf(fp_intermediate, "%x\t%s\t%s\t%s", &locctr, label, opcode, operand);
     }
 
-    // at this point 'loc' holds the address of the END line; program length = loc - startAddr
-    int programLength = loc - startAddr;
-
-    // write header with program length (use program name from START line)
-    fprintf(fp4, "H^%s^%06X^%06X\n", progName, startAddr, programLength);
-
-    // write text record if we have any object codes
-    if (textBytes > 0) {
-        fprintf(fp4, "T^%06X^%02X^%s\n", textStart, textBytes, textBuf);
+    // --- 8. WRITE FINAL TEXT RECORD ---
+    if (text_record_len > 0) {
+        fprintf(fp_obj, "T^%06X^%02X%s\n", text_record_start_addr, text_record_len, text_record);
     }
 
-    // write end record - use execution start address (startAddr)
-    fprintf(fp4, "E^%06X\n", startAddr);
+    // --- 9. END RECORD ---
+    fprintf(fp_obj, "E^%06X\n", start_addr);
 
-    fclose(fp1);
-    fclose(fp2);
-    fclose(fp3);
-    fclose(fp4);
+    fclose(fp_intermediate);
+    fclose(fp_obj);
 
-    printf("\nPass 2 completed. Output written to output.txt\n");
-    
-    displayFile("output.txt");
-}
-
-int main() {
-    passTwo();
+    printf("\n✅ Pass 2 complete. Object code generated in objcode.txt\n");
     return 0;
 }
-
