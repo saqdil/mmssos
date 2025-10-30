@@ -1,6 +1,7 @@
 Assembly Programs
 --------------------------
-16bitaddition.asm     16bitsearching.asm     16bitsorting.asm  
+16bitaddition.asm     16bitsearching.asm     16bitsearching+.asm
+16bitsorting.asm  
 16bitsorting+.asm     16bitsubtraction.asm   oddeven.asm  
 oddeven+.asm          palindrome.asm  
 
