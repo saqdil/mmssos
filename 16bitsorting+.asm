@@ -1,182 +1,169 @@
-data segment
-MSG1 DB 0Dh,0Ah ,'Enter the Array (press Enter after each number):$'
-MSG2 DB 0Dh,0Ah,'Sorted Array: $'
-MSG3 DB 0Dh,0Ah,'Before Sorting:$'
-MSG4 DB 0Dh,0Ah,'Enter the length of Array (1-9):$'
-ARRAY DW 50 DUP(0)
-LEN DB 1 DUP(?)
-SPACE DB ' $'
-data ends
+ DATA SEGMENT
+    MSG1 DB 10,13,'ENTER THE NUMBER OF ELEMENTS:$'
+    MSG2 DB 10,13,'ENTER THE ELEMENTS: $'
+    MSG3 DB 10,13,'ENTER THE SEARCH ELEMENT: $'
+    MSG4 DB 10,13,'NOT FOUND$'
+    MSG5 DB 10,13,'FOUND AT INDEX: $'
+    
+    ARR DW 50 DUP(0) 
+    LENGTH DB ?
 
-code segment
-ASSUME CS:code, DS:data
+    INPUT_BUFFER DB 10, ?, 10 DUP(0)
+    NEWLINE DB 10, 13, '$'   
+DATA ENDS
 
-START:
-MOV AX,data
-MOV DS,AX
+CODE SEGMENT
+    ASSUME CS:CODE DS:DATA
+    START:
+        MOV AX,DATA
+        MOV DS,AX
 
-LEA DX,MSG4
-MOV AH,09H
-INT 21H
-MOV AH,01H
-INT 21H
-SUB AL,'0'
-MOV [LEN],AL
+        LEA DX,MSG1
+        MOV AH,09H
+        INT 21H
+        
+        CALL READ_NUMBER 
+        MOV LENGTH,AL   
+        MOV CL,AL       
+        SUB CH,CH       
+        
+        LEA SI,ARR  
 
-MOV CL,[LEN]
-MOV CH,0
-MOV SI,0
-LEA DX,MSG1
-MOV AH,09H
-INT 21H
+        LEA DX,MSG2 
+        MOV AH,09H
+        INT 21H
+        
+    READ_LOOP:  
+        CALL READ_NUMBER 
+        MOV [SI],AX  
+        ADD SI,2     
+        LOOP READ_LOOP   
 
-READ_LOOP:
-CALL READ_16BIT_NUM
-MOV ARRAY[SI], AX
-ADD SI, 2
-LOOP READ_LOOP
+        LEA SI,ARR     
+        
+        LEA DX,MSG3
+        MOV AH,09H
+        INT 21H
+        
+        CALL READ_NUMBER 
+        MOV BX,AX       
+        
+        MOV CL,LENGTH   
+        SUB CH,CH       
+        MOV DI, 0
+        
+    SEARCH_LOOP:    
+        MOV AX,[SI]  
+        CMP AX,BX   
+        JE FOUND
+        ADD SI,2     
+        INC DI
+        LOOP SEARCH_LOOP 
+        
+    NOTFOUND:
+        LEA DX,MSG4
+        MOV AH,09H
+        INT 21H
+        JMP EXIT
+        
+    FOUND:
+        LEA DX,MSG5
+        MOV AH,09H
+        INT 21H
+        
+        MOV AX, DI
+        CALL PRINT_NUMBER
+        
+        JMP EXIT
+        
+    EXIT:
+        MOV AH,4CH
+        INT 21H
 
+READ_NUMBER PROC
+    PUSH CX
+    PUSH BX
+    PUSH DX
+    PUSH SI
 
-MOV CL,[LEN]
-MOV CH,0
-MOV SI,0
-LEA DX,MSG3
-MOV AH,09H
-INT 21H
+    LEA DX, INPUT_BUFFER
+    MOV AH, 0AH   
+    INT 21H
 
-PRINT_INITIAL:
-MOV AX, ARRAY[SI]
-CALL PRINT_16BIT_NUM
+    LEA DX, NEWLINE
+    MOV AH, 09H
+    INT 21H
+    
+    LEA SI, INPUT_BUFFER + 2  
+    MOV CL, [INPUT_BUFFER + 1] 
+    SUB CH,CH                 
+    
+    MOV AX, 0                 
+    MOV BX, 10                
 
-LEA DX,SPACE
-MOV AH,09H
-INT 21H
+    JCXZ DONE_CONVERT_READ     
+    
+CONVERT_LOOP_READ:
+    MOV DX, 0                 
+    MOV DL, [SI]              
+    SUB DL, 30H               
+    
+    PUSH DX                   
 
-ADD SI, 2
-LOOP PRINT_INITIAL
+    MUL BX                    
+    
+    POP DX                    
+    ADD AX, DX                
+    
+    INC SI                    
+    DEC CX                    
+    JNZ CONVERT_LOOP_READ     
+    
+DONE_CONVERT_READ:
+    POP SI
+    POP DX
+    POP BX
+    POP CX
+    RET
+READ_NUMBER ENDP
 
-
-MOV CL,[LEN]
-DEC CL
-
-OUTER_LOOP:
-MOV CH,CL
-MOV SI,0
-INNER_LOOP:
-MOV AX, ARRAY[SI]
-CMP AX, ARRAY[SI+2]
-JBE SKIP_SWAP
-
-XCHG AX, ARRAY[SI+2]
-MOV ARRAY[SI], AX
-
-SKIP_SWAP:
-ADD SI, 2
-DEC CH
-JNZ INNER_LOOP
-DEC CL
-JNZ OUTER_LOOP
-
-LEA DX,MSG2
-MOV AH,09H
-INT 21H
-
-MOV CL,[LEN]
-MOV CH,0
-MOV SI,0
-
+PRINT_NUMBER PROC
+    PUSH AX
+    PUSH BX
+    PUSH CX
+    PUSH DX
+    
+    MOV CX, 0
+    MOV BX, 10
+    
+    CMP AX, 0
+    JNE CONVERT_LOOP_PRINT
+    
+    PUSH 0
+    INC CX
+    JMP PRINT_LOOP
+    
+CONVERT_LOOP_PRINT:
+    MOV DX, 0
+    DIV BX
+    PUSH DX
+    INC CX
+    CMP AX, 0
+    JNE CONVERT_LOOP_PRINT
+    
 PRINT_LOOP:
-MOV AX, ARRAY[SI]
-CALL PRINT_16BIT_NUM
-
-LEA DX,SPACE
-MOV AH, 09h
-INT 21h
-
-ADD SI, 2
-LOOP PRINT_LOOP
-
-MOV AH, 4CH
-INT 21H
-
-READ_16BIT_NUM PROC
-PUSH BX
-PUSH CX
-PUSH DX
-
-XOR AX, AX
-
-READ_CHAR:
-PUSH AX
-MOV AH, 01H
-INT 21H
-MOV BL, AL
-POP AX
-
-CMP BL, 0Dh
-JE READ_DONE
-
-SUB BL, '0'
-XOR CX, CX
-MOV CL, BL
-
-PUSH CX
-
-MOV BX, 10
-MUL BX
-
-POP CX
-ADD AX, CX
-
-JMP READ_CHAR
-
-READ_DONE:
-POP DX
-POP CX
-POP BX
-RET
-READ_16BIT_NUM ENDP
-
-PRINT_16BIT_NUM PROC
-PUSH AX
-PUSH BX
-PUSH CX
-PUSH DX
-
-CMP AX, 0
-JNE START_DIV
-
-MOV DL, '0'
-MOV AH, 02H
-INT 21H
-JMP PRINT_EXIT
-
-START_DIV:
-XOR CX, CX
-MOV BX, 10
-
-DIV_LOOP:
-XOR DX, DX
-DIV BX
-PUSH DX
-INC CX
-OR AX, AX
-JNZ DIV_LOOP
-
-PRINT_STACK:
-POP DX
-ADD DL, '0'
-MOV AH, 02H
-INT 21H
-LOOP PRINT_STACK
-
-PRINT_EXIT:
-POP DX
-POP CX
-POP BX
-POP AX
-RET
-PRINT_16BIT_NUM ENDP
-
+    POP DX
+    ADD DL, 30H
+    MOV AH, 02H
+    INT 21H
+    LOOP PRINT_LOOP
+    
+    POP DX
+    POP CX
+    POP BX
+    POP AX
+    RET
+PRINT_NUMBER ENDP
+        
 CODE ENDS
 END START
