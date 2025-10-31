@@ -1,84 +1,105 @@
- DATA SEGMENT
-    MSG1 DB 10,13,'ENTER THE NUMBER OF ELEMENTS:$'
-    MSG2 DB 10,13,'ENTER THE ELEMENTS: $'
-    MSG3 DB 10,13,'ENTER THE SEARCH ELEMENT: $'
-    MSG4 DB 10,13,'NOT FOUND$'
-    MSG5 DB 10,13,'FOUND AT INDEX: $'
-    
-    ARR DW 50 DUP(0) 
-    LENGTH DB ?
+data segment
+MSG1 DB 0Dh,0Ah ,'Enter the Array (press Enter after each number):$'
+MSG2 DB 0Dh,0Ah,'Sorted Array: $'
+MSG3 DB 0Dh,0Ah,'Before Sorting:$'
+MSG4 DB 0Dh,0Ah,'Enter the length of Array:$'
+ARRAY DW 50 DUP(0)
+LEN DB 1 DUP(?)
+SPACE DB ' $'
 
-    INPUT_BUFFER DB 10, ?, 10 DUP(0)
-    NEWLINE DB 10, 13, '$'   
-DATA ENDS
+INPUT_BUFFER DB 10, ?, 10 DUP(0)
+NEWLINE DB 10, 13, '$'   
+data ends
 
-CODE SEGMENT
-    ASSUME CS:CODE DS:DATA
-    START:
-        MOV AX,DATA
-        MOV DS,AX
+code segment
+ASSUME CS:code, DS:data
 
-        LEA DX,MSG1
-        MOV AH,09H
-        INT 21H
-        
-        CALL READ_NUMBER 
-        MOV LENGTH,AL   
-        MOV CL,AL       
-        SUB CH,CH       
-        
-        LEA SI,ARR  
+START:
+MOV AX,data
+MOV DS,AX
 
-        LEA DX,MSG2 
-        MOV AH,09H
-        INT 21H
-        
-    READ_LOOP:  
-        CALL READ_NUMBER 
-        MOV [SI],AX  
-        ADD SI,2     
-        LOOP READ_LOOP   
+LEA DX,MSG4
+MOV AH,09H
+INT 21H
 
-        LEA SI,ARR     
-        
-        LEA DX,MSG3
-        MOV AH,09H
-        INT 21H
-        
-        CALL READ_NUMBER 
-        MOV BX,AX       
-        
-        MOV CL,LENGTH   
-        SUB CH,CH       
-        MOV DI, 0
-        
-    SEARCH_LOOP:    
-        MOV AX,[SI]  
-        CMP AX,BX   
-        JE FOUND
-        ADD SI,2     
-        INC DI
-        LOOP SEARCH_LOOP 
-        
-    NOTFOUND:
-        LEA DX,MSG4
-        MOV AH,09H
-        INT 21H
-        JMP EXIT
-        
-    FOUND:
-        LEA DX,MSG5
-        MOV AH,09H
-        INT 21H
-        
-        MOV AX, DI
-        CALL PRINT_NUMBER
-        
-        JMP EXIT
-        
-    EXIT:
-        MOV AH,4CH
-        INT 21H
+CALL READ_NUMBER
+MOV [LEN],AL
+
+MOV CL,[LEN]
+MOV CH,0
+MOV SI,0
+LEA DX,MSG1
+MOV AH,09H
+INT 21H
+
+READ_LOOP:
+CALL READ_NUMBER
+MOV ARRAY[SI], AX
+ADD SI, 2
+LOOP READ_LOOP
+
+
+MOV CL,[LEN]
+MOV CH,0
+MOV SI,0
+LEA DX,MSG3
+MOV AH,09H
+INT 21H
+
+PRINT_INITIAL:
+MOV AX, ARRAY[SI]
+CALL PRINT_NUMBER
+
+LEA DX,SPACE
+MOV AH,09H
+INT 21H
+
+ADD SI, 2
+LOOP PRINT_INITIAL
+
+
+MOV CL,[LEN]
+DEC CL
+
+OUTER_LOOP:
+MOV CH,CL
+MOV SI,0
+INNER_LOOP:
+MOV AX, ARRAY[SI]
+CMP AX, ARRAY[SI+2]
+JBE SKIP_SWAP
+
+XCHG AX, ARRAY[SI+2]
+MOV ARRAY[SI], AX
+
+SKIP_SWAP:
+ADD SI, 2
+DEC CH
+JNZ INNER_LOOP
+DEC CL
+JNZ OUTER_LOOP
+
+LEA DX,MSG2
+MOV AH,09H
+INT 21H
+
+MOV CL,[LEN]
+MOV CH,0
+MOV SI,0
+
+PRINT_LOOP:
+MOV AX, ARRAY[SI]
+CALL PRINT_NUMBER
+
+LEA DX,SPACE
+MOV AH, 09h
+INT 21h
+
+ADD SI, 2
+LOOP PRINT_LOOP
+
+MOV AH, 4CH
+INT 21H
 
 READ_NUMBER PROC
     PUSH CX
@@ -141,7 +162,7 @@ PRINT_NUMBER PROC
     
     PUSH 0
     INC CX
-    JMP PRINT_LOOP
+    JMP PRINT_LOOP_NUM
     
 CONVERT_LOOP_PRINT:
     MOV DX, 0
@@ -151,12 +172,12 @@ CONVERT_LOOP_PRINT:
     CMP AX, 0
     JNE CONVERT_LOOP_PRINT
     
-PRINT_LOOP:
+PRINT_LOOP_NUM:
     POP DX
     ADD DL, 30H
     MOV AH, 02H
     INT 21H
-    LOOP PRINT_LOOP
+    LOOP PRINT_LOOP_NUM
     
     POP DX
     POP CX
@@ -164,6 +185,6 @@ PRINT_LOOP:
     POP AX
     RET
 PRINT_NUMBER ENDP
-        
+
 CODE ENDS
 END START
